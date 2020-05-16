@@ -46,9 +46,13 @@ def help_command(message):
     bot.send_message(message.chat.id,
         '1) Если бот завис и не работает нажмите /start.\n' +
         '2) Если у вас есть предложение напишите мне.\n' +
-        '3) Список команд нажмите /commands \n',
+        '3) Список команд нажмите /commands \n' +
+        '4) Время и дата на сервере /time \n',
         reply_markup=keyboard.keyboardhelp)
 
+@bot.message_handler(commands=['time'])
+def time_command(message):
+    bot.send_message(message.chat.id, 'Время и дата на сервере\n'+now.strftime("%d-%m-%Y %H:%M"))
 
 @bot.message_handler (commands=['start'])
 def start(message):
@@ -115,7 +119,7 @@ def getRegData(user, title, name):
     # Load next_step_handlers from save file (default "./.handlers-saves/step.save")
     # WARNING It will work only if enable_save_next_step_handlers was called!
     bot.load_next_step_handlers ()
-    
+
 @bot.callback_query_handler(func=lambda c:True)
 def inline(c):
   if c.data == 'NumberOne':
@@ -150,3 +154,4 @@ while True:
         time.sleep (4)
         logging.error('error: {}'.format(sys.exc_info()[0]))
         time.sleep(4)
+
