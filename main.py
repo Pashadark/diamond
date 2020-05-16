@@ -16,7 +16,6 @@ import keyboard
 import logging
 from string import Template
 import requests
-import constants, os, re
 import datetime
 
 
