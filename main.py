@@ -32,27 +32,15 @@ class User:
         for key in keys:
             self.key = None
 
-# Тут работаем с командой /start
+# Тут работаем с командой start
 @bot.message_handler(commands=['start'])
 def command_hello(message):
     bot.reply_to(message, "Привет, если вы видите это сообщение, значит я работаю так, как надо🤩", markup=keyboard.keyboard1)
 
-# Тут работаем с командой /help
+# Тут работаем с командой help
 @bot.message_handler(commands=['help'])
 def welcome_help(message):
     bot.send_message(message.chat.id, 'Чем я могу тебе помочь?')
-
-@bot.message_handler(commands=['ping'])
-def ping(message):
-
-    nowtime = time.time()
-    uptime = round(nowtime - runtime)
-    uptimestr = str(time.strftime("%H:%M:%S", time.gmtime(int(uptime))))
-    answertime = nowtime - message.date
-    nowtimestr = time.ctime(nowtime)
-    status = bot.get_webhook_info().pending_update_count - 1
-    msgg = bot.reply_to(message,'Текущее время: '+ str(nowtimestr) + '\nБот ответил за: ' + str(answertime) + '\n Бот активен уже: ' + str(uptimestr)  + '\nСообщений в очереди: ' + str(status),  parse_mode='html')
-
 
 @bot.message_handler(commands=['barber'])
 def user_reg(message):
