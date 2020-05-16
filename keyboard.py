@@ -3,8 +3,7 @@ import telebot
 from telebot import types
 #Главное меню
 keyboard1 = telebot.types.ReplyKeyboardMarkup (one_time_keyboard=True, resize_keyboard=True)
-keyboard1.row ('/barber')
-keyboard1.row ('🔑Аккаунт', '🏴‍Кнопка')
+keyboard1.row ('✂Барбер')
 keyboard1.row ('🔩Команды', '❌Обратно')
 #Барбер меню
 barber = telebot.types.ReplyKeyboardMarkup (one_time_keyboard=True, resize_keyboard=True)
@@ -27,3 +26,18 @@ itembtn11 = types.KeyboardButton ('Удаление волос в носу с п
 itembtn12 = types.KeyboardButton ('Коррекция бровей')
 itembtn13 = types.KeyboardButton ('Мытьё и укладка волос')
 service.add (itembtn1, itembtn2, itembtn3, itembtn4, itembtn5, itembtn6, itembtn7, itembtn8, itembtn9, itembtn10, itembtn11, itembtn12, itembtn13)
+
+keyboardhelp = telebot.types.InlineKeyboardMarkup()
+keyboardhelp.add(telebot.types.InlineKeyboardButton('Написать разработчику', url='telegram.me/pashadark'))
+
+key = types.InlineKeyboardMarkup()
+but_1 = types.InlineKeyboardButton(text="Тигран", callback_data="NumberOne")
+but_2 = types.InlineKeyboardButton(text="Алексей", callback_data="NumberTwo")
+but_3 = types.InlineKeyboardButton(text="Антон", callback_data="NumberTree")
+key.add(but_1, but_2, but_3)
+
+key2 = types.InlineKeyboardMarkup()
+but_1 = types.InlineKeyboardButton(text="Тигран", callback_data="NumberOne")
+but_2 = types.InlineKeyboardButton(text="Алексей", callback_data="NumberTwo")
+but_3 = types.InlineKeyboardButton(text="Антон", callback_data="NumberTree")
+key.add(but_1, but_2, but_3)
