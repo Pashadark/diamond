@@ -12,9 +12,9 @@ from string import Template
 import requests
 
 # Токены
-bot = telebot.TeleBot(config.token)
-
-# Логи
+bot = telebot.TeleBot (config.token)
+# Классы
+# предварительно создаем переменную psw ( рандомное число )
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -32,20 +32,17 @@ class User:
         for key in keys:
             self.key = None
 
-# Тут работаем с командой start
-@bot.message_handler(commands=['start'])
-def command_hello(message):
-    bot.reply_to(message, "Привет, если вы видите это сообщение, значит я работаю так, как надо🤩", markup=keyboard.keyboard1)
 
-# Тут работаем с командой help
-@bot.message_handler(commands=['help'])
-def welcome_help(message):
-    bot.send_message(message.chat.id, 'Чем я могу тебе помочь?')
+@bot.message_handler (commands=['start'])
+def start(message):
+    bot.send_message (message.chat.id, 'Привет, я пока в тестовом режиме работаю.', reply_markup=keyboard.keyboard1)
+    bot.send_sticker (message.chat.id, 'CAACAgIAAxkBAAINkl7AH2HI5BFg7fTaSd5cvBR67-hOAAKMCAACeVziCYUNIF_-rII7GQQ')
 
-@bot.message_handler(commands=['barber'])
+
+@bot.message_handler (commands=['barber'])
 def user_reg(message):
-    msg = bot.send_message(message.chat.id, 'Выберите мастера', reply_markup=keyboard.barber)
-    bot.register_next_step_handler(msg, process_category_step)
+    msg = bot.send_message (message.chat.id, 'Выберите мастера', reply_markup=keyboard.barber)
+    bot.register_next_step_handler (msg, process_category_step)
 
 
 def process_category_step(message):
