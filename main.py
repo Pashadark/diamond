@@ -137,13 +137,13 @@ def process_end_step(message):
         bot.send_chat_action(message.chat.id, 'typing')
         time.sleep(1)
         bot.send_message(chat_id, getRegData(user, 'Мы все учли, отправляем...', message.from_user.first_name),
-                          parse_mode="Markdown", reply_markup=keyboard.keyboard1)
-        time.sleep (2)
-        bot.send_message (message.chat.id, 'Готово', reply_markup=keyboard.keyboard1)
-        # Отправляем в группу
-        bot.send_message(config.chat_id, getRegData(user, 'Оповещение от', bot.get_me ().username),
                           parse_mode="Markdown")
-        bot.send_chat_action(message.chat.id, 'typing')
+        time.sleep(2)
+        bot.send_message(message.chat.id, 'Готово', reply_markup=keyboard.keyboard1)
+        # Отправляем в группу
+        bot.send_message(config.chat_id, getRegData(user, 'Оповещение от', bot.get_me().username),
+                          parse_mode="Markdown")
+
 
     except Exception as e:
         bot.reply_to(message, 'Ой что-то не то!!')
