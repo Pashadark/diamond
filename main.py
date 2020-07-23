@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 ########################################
-# Telegram bot Diamond version 0.0.2   #
+# Telegram bot Diamond version 0.0.1   #
 # programming and created by @pashadark#
 ########################################
 
@@ -27,6 +27,8 @@ now = datetime.datetime.now()
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+named_tuple = time.localtime() # получить struct_time
+time_string = time.strftime("%m/%d/%Y, %H:%M:%S", named_tuple)
 # Классы
 user_dict = {}
 
@@ -63,7 +65,7 @@ def help_command(message):
 
 @bot.message_handler(commands=['time'])
 def time_command(message):
-    bot.send_message(message.chat.id, 'Время и дата на сервере\n' + now.strftime("%d-%m-%Y %H:%M"))
+    bot.send_message(message.chat.id, 'Время и дата на сервере\n' + now.strftime("%m/%d/%Y, %H:%M:%S"))
 
 bot.message_handler (commands=['list'])
 def list_command(message):
@@ -175,7 +177,7 @@ def getRegData(user, title, name):
         'head': user.head,
         'beard': user.beard,
         'end': user.end,
-        'data': now.strftime("%d-%m-%Y %H:%M")
+        'data': now.strftime("%m/%d/%Y, %H:%M:%S")
     })
     # Enable saving next step handlers to file "./.handlers-saves/step.save".
     # Delay=2 means that after any change in next step handlers (e.g. calling register_next_step_handler())
