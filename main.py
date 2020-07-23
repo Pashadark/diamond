@@ -175,7 +175,7 @@ def getRegData(user, title, name):
         'head': user.head,
         'beard': user.beard,
         'end': user.end,
-        'data': now.strftime("%d-%m-%Y %H:%M", time.localtime())
+        'data': now.strftime("%d-%m-%Y %H:%M")
     })
     # Enable saving next step handlers to file "./.handlers-saves/step.save".
     # Delay=2 means that after any change in next step handlers (e.g. calling register_next_step_handler())
