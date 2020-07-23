@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 ########################################
-# Telegram bot Diamond version 0.0.1   #
+# Telegram bot Diamond version 0.0.2   #
 # programming and created by @pashadark#
 ########################################
 
@@ -15,6 +15,7 @@ import config
 import keyboard
 import logging
 from string import Template
+
 import requests
 import datetime
 
@@ -78,16 +79,16 @@ def start_message(message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
         # mention = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
-        bot.send_message (message.chat.id, 'Привет администратор', reply_markup=keyboard.admin)
-        bot.send_message (message.chat.id, 'Вот пару команд для тебя', reply_markup=keyboard.admin)
+        bot.send_message(message.chat.id, 'Привет администратор', reply_markup=keyboard.admin)
+        bot.send_message(message.chat.id, 'Вот пару команд для тебя', reply_markup=keyboard.admin)
     else:
-        bot.send_message (message.chat.id,
+        bot.send_message(message.chat.id,
                           'Вы не являетесь администратором для выполнения этой команды' + str (message.chat.id))
 
 
-@bot.message_handler (commands=['start'])
+@bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message (message.chat.id, 'Привет, я пока в тестовом режиме работаю. \nБудут проблемы нажми /help',
+    bot.send_message(message.chat.id, 'Привет, я пока в тестовом режиме работаю. \nБудут проблемы нажми /help',
                       reply_markup=keyboard.keyboard1)
 
 
@@ -95,7 +96,7 @@ def start(message):
 @bot.message_handler(content_types=['text'])
 def send_text(message):
     if message.text == '✂Барбер':
-        bot.send_chat_action (message.chat.id, 'typing')
+        bot.send_chat_action(message.chat.id, 'typing')
         time.sleep(1)
         msg = bot.send_message(message.chat.id, 'Выберите мастера', reply_markup=keyboard.barber)
         bot.register_next_step_handler(msg, process_category_step)
@@ -104,23 +105,36 @@ def process_category_step(message):
     try:
         chat_id = message.chat.id
         user_dict[chat_id] = User(message.text)
-        bot.send_chat_action (message.chat.id, 'typing')
+        bot.send_chat_action(message.chat.id, 'typing')
         time.sleep(1)
-        msg = bot.send_message(message.chat.id, 'Че по голове?', reply_markup=keyboard.service1)
+        msg = bot.send_message(message.chat.id, 'Выберите услугу 1', reply_markup=keyboard.service1)
         bot.register_next_step_handler(msg, process_head_step)
 
     except Exception as e:
         bot.reply_to(message, 'Ой что-то не то!!')
-
 
 def process_head_step(message):
     try:
         chat_id = message.chat.id
         user = user_dict[chat_id]
         user.head = message.text
-        bot.send_chat_action (message.chat.id, 'typing')
+        bot.send_chat_action(message.chat.id, 'typing')
         time.sleep(1)
-        msg = bot.send_message(message.chat.id, 'Че по бороде?', reply_markup=keyboard.service2)
+        msg = bot.send_message(message.chat.id, 'Выберите услугу 2', reply_markup=keyboard.service2)
+        bot.register_next_step_handler(msg, process_beard_step)
+
+    except Exception as e:
+        bot.reply_to(message, 'Ой что-то не то!!')
+
+
+def process_beard_step(message):
+    try:
+        chat_id = message.chat.id
+        user = user_dict[chat_id]
+        user.beard = message.text
+        bot.send_chat_action(message.chat.id, 'typing')
+        time.sleep(1)
+        msg = bot.send_message(message.chat.id, 'Выберите услугу 3', reply_markup=keyboard.service3)
         bot.register_next_step_handler(msg, process_end_step)
 
     except Exception as e:
@@ -152,15 +166,16 @@ def process_end_step(message):
 # Формирует вид заявки регистрации
 def getRegData(user, title, name):
     t = Template(
-        '$title *$name* \n\n 🧔Барбер: *$category* \n\n ✂Голова: *$head* \n ✂Борода: *$end* \n ⌚Дата: *$data*')
+        '$title *$name* \n\n 🧔Барбер: *$category* \n\n ✂Голова: *$head* \n ✂Борода: *$beard* \n ✂Лицо: *$end* \n ⌚Дата: *$data*')
 
     return t.substitute({
         'title': title,
         'name': name,
         'category': user.category,
-        'head' : user.head,
+        'head': user.head,
+        'beard': user.beard,
         'end': user.end,
-        'data': now.strftime("%d-%m-%Y %H:%M")
+        'data': now.strftime("%d-%m-%Y %H:%M", time.localtime())
     })
     # Enable saving next step handlers to file "./.handlers-saves/step.save".
     # Delay=2 means that after any change in next step handlers (e.g. calling register_next_step_handler())
