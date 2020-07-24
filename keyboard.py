@@ -15,6 +15,7 @@ barber = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboa
 barber.row('Тигран')
 barber.row('Алексей')
 barber.row('Антон')
+barber.row('Гаянэ')
 # Сервис меню
 service1 = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
 itembtn1 = types.KeyboardButton('Мужская стрижка')
@@ -44,10 +45,5 @@ service3.add(itembtn12, itembtn13, itembtn14, itembtn15, itembtn16)
 keyboardhelp = telebot.types.InlineKeyboardMarkup()
 keyboardhelp.add(telebot.types.InlineKeyboardButton('Написать разработчику', url='telegram.me/pashadark'))
 
-key = types.InlineKeyboardMarkup()
-but_1 = types.InlineKeyboardButton(text="1", callback_data="NumberOne")
-but_2 = types.InlineKeyboardButton(text="2", callback_data="NumberTwo")
-but_3 = types.InlineKeyboardButton(text="3", callback_data="NumberTree")
-key.add(but_1, but_2, but_3)
 
 
