@@ -2,33 +2,38 @@
 # -*- coding: utf-8 -*-
 
 ########################################
-# Telegram bot Diamond version 0.0.1   #
+# Telegram bot Diamond version 0.0.2   #
 # programming and created by @pashadark#
 ########################################
 
 # Импорты
 import sys
+
 import telebot
 from telebot import types
 import time
+import datetime
 import config
 import keyboard
 import logging
 from string import Template
-
+import tg_analytic
+import datetime as DT
+import pytz
 import requests
-import datetime
+
+# Включить ведение журнала
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+
+logger = logging.getLogger(__name__)
+
 
 # Токены
 bot = telebot.TeleBot(config.token)
-now = datetime.datetime.now()
+# Атрибуты
+now = datetime.datetime.today()
 
-
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-named_tuple = time.localtime() # получить struct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S", named_tuple)
 # Классы
 user_dict = {}
 
@@ -42,16 +47,7 @@ class User:
         for key in keys:
             self.key = None
 
-
-### Функция проверки авторизации
-def autor(chatid):
-    strid = str(chatid)
-    for item in config.users:
-        if item == strid:
-            return True
-    return False
-
-
+# Команды
 @bot.message_handler(commands=['help'])
 def help_command(message):
     bot.send_message(message.chat.id,
@@ -62,30 +58,32 @@ def help_command(message):
                       '5) Если у вас есть предложение напишите мне⤵',
                       reply_markup=keyboard.keyboardhelp)
 
-
 @bot.message_handler(commands=['time'])
 def time_command(message):
     bot.send_message(message.chat.id, 'Время и дата на сервере\n' + now.strftime("%m/%d/%Y, %H:%M:%S"))
+
+@bot.message_handler(commands=['static'])
+def static_command(message):
+    bot.send_message(message.chat.id, 'Напишите имя барбера')
+    if message.text[:10] == 'Напишите имя барбера' or message.text[:10] == 'Напишите имя барбера':
+        st = message.text.split (' ')
+        if 'txt' in st or 'тхт' in st:
+            tg_analytic.analysis (st, message.chat.id)
+            with open ('%s.txt' % message.chat.id, 'r', encoding='UTF-8') as file:
+                bot.send_document (message.chat.id, file)
+                tg_analytic.remove (message.chat.id)
+        else:
+            messages = tg_analytic.analysis (st, message.chat.id)
+            bot.send_message (message.chat.id, messages)
 
 bot.message_handler (commands=['list'])
 def list_command(message):
     bot.send_message(message.chat.id, 'Список администраторов')
 
 
-
 @bot.message_handler (commands=['admin'])
 def start_message(message):
-    if autor(message.chat.id):
-        cid = message.chat.id
-        message_text = message.text
-        user_id = message.from_user.id
-        user_name = message.from_user.first_name
-        # mention = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
-        bot.send_message(message.chat.id, 'Привет администратор', reply_markup=keyboard.admin)
-        bot.send_message(message.chat.id, 'Вот пару команд для тебя', reply_markup=keyboard.admin)
-    else:
-        bot.send_message(message.chat.id,
-                          'Вы не являетесь администратором для выполнения этой команды' + str (message.chat.id))
+    bot.send_message(message.chat.id, 'Привет администратор', reply_markup=keyboard.admin)
 
 
 @bot.message_handler(commands=['start'])
@@ -94,9 +92,19 @@ def start(message):
                       reply_markup=keyboard.keyboard1)
 
 
-
 @bot.message_handler(content_types=['text'])
 def send_text(message):
+    if message.text[:10] == 'статистика' or message.text[:10] == 'Cтатистика':
+        st = message.text.split(' ')
+        if 'txt' in st or 'тхт' in st:
+            tg_analytic.analysis(st,message.chat.id)
+            with open('%s.txt' %message.chat.id ,'r',encoding='UTF-8') as file:
+                bot.send_document(message.chat.id,file)
+            tg_analytic.remove(message.chat.id)
+        else:
+            messages = tg_analytic.analysis(st,message.chat.id)
+            bot.send_message(message.chat.id, messages)
+
     if message.text == '✂Барбер':
         bot.send_chat_action(message.chat.id, 'typing')
         time.sleep(1)
@@ -110,10 +118,11 @@ def process_category_step(message):
         bot.send_chat_action(message.chat.id, 'typing')
         time.sleep(1)
         msg = bot.send_message(message.chat.id, 'Выберите услугу 1', reply_markup=keyboard.service1)
+        tg_analytic.statistics (message.chat.id, message.text)
         bot.register_next_step_handler(msg, process_head_step)
 
     except Exception as e:
-        bot.reply_to(message, 'Ой что-то не то!!')
+        bot.reply_to(message, '⚠ Ошибка, мы исправим')
 
 def process_head_step(message):
     try:
@@ -123,10 +132,11 @@ def process_head_step(message):
         bot.send_chat_action(message.chat.id, 'typing')
         time.sleep(1)
         msg = bot.send_message(message.chat.id, 'Выберите услугу 2', reply_markup=keyboard.service2)
+        tg_analytic.statistics (message.chat.id, message.text)
         bot.register_next_step_handler(msg, process_beard_step)
 
     except Exception as e:
-        bot.reply_to(message, 'Ой что-то не то!!')
+        bot.reply_to(message, '⚠ Ошибка, мы исправим')
 
 
 def process_beard_step(message):
@@ -137,10 +147,11 @@ def process_beard_step(message):
         bot.send_chat_action(message.chat.id, 'typing')
         time.sleep(1)
         msg = bot.send_message(message.chat.id, 'Выберите услугу 3', reply_markup=keyboard.service3)
+        tg_analytic.statistics (message.chat.id, message.text)
         bot.register_next_step_handler(msg, process_end_step)
 
     except Exception as e:
-        bot.reply_to(message, 'Ой что-то не то!!')
+        bot.reply_to(message, '⚠ Ошибка, мы исправим')
 
 
 def process_end_step(message):
@@ -152,7 +163,7 @@ def process_end_step(message):
         # Говорим о создании заявки
         bot.send_chat_action(message.chat.id, 'typing')
         time.sleep(1)
-        bot.send_message(chat_id, getRegData(user, 'Мы все учли, отправляем...', message.from_user.first_name),
+        bot.send_message(chat_id, getRegData(user, 'Собираем данные, отправляем...', message.from_user.first_name),
                           parse_mode="Markdown")
         time.sleep(2)
         bot.send_message(message.chat.id, 'Готово', reply_markup=keyboard.keyboard1)
@@ -162,7 +173,7 @@ def process_end_step(message):
 
 
     except Exception as e:
-        bot.reply_to(message, 'Ой что-то не то!!')
+        bot.reply_to(message, '⚠Ошибка, мы исправим')
 
 
 # Формирует вид заявки регистрации
@@ -177,7 +188,7 @@ def getRegData(user, title, name):
         'head': user.head,
         'beard': user.beard,
         'end': user.end,
-        'data': now.strftime("%m/%d/%Y")
+        'data': now.strftime("%d/%m/%Y")
     })
     # Enable saving next step handlers to file "./.handlers-saves/step.save".
     # Delay=2 means that after any change in next step handlers (e.g. calling register_next_step_handler())
@@ -187,21 +198,6 @@ def getRegData(user, title, name):
     # Load next_step_handlers from save file (default "./.handlers-saves/step.save")
     # WARNING It will work only if enable_save_next_step_handlers was called!
     bot.load_next_step_handlers ()
-
-@bot.callback_query_handler (func=lambda c: True)
-def inline(c):
-    if c.data == 'NumberOne':
-        bot.send_message (c.message.chat.id, 'Это кнопка 1')
-    if c.data == 'NumberTwo':
-        bot.send_message (c.message.chat.id, 'Это кнопка 2')
-    if c.data == 'NumberTree':
-        key = types.InlineKeyboardMarkup ()
-        but_1 = types.InlineKeyboardButton (text="NumberOne", callback_data="NumberOne")
-        but_2 = types.InlineKeyboardButton (text="NumberTwo", callback_data="NumberTwo")
-        but_3 = types.InlineKeyboardButton (text="NumberTree", callback_data="NumberTree")
-        key.add(but_1, but_2, but_3)
-        bot.send_message(c.message.chat.id, 'Это кнопка 3', reply_markup=key)
-
 
 # Ребут после ошибки
 while True:
