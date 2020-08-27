@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 ########################################
-# Telegram bot Diamond version 0.0.2   #
+# Telegram bot Diamond version 0.0.3   #
 # programming and created by @pashadark#
 ########################################
 
@@ -33,7 +33,6 @@ logger = logging.getLogger(__name__)
 bot = telebot.TeleBot(config.token)
 # Атрибуты
 now = datetime.datetime.today()
-
 # Классы
 user_dict = {}
 
@@ -62,20 +61,6 @@ def help_command(message):
 def time_command(message):
     bot.send_message(message.chat.id, 'Время и дата на сервере\n' + now.strftime("%m/%d/%Y, %H:%M:%S"))
 
-@bot.message_handler(commands=['static'])
-def static_command(message):
-    bot.send_message(message.chat.id, 'Напишите имя барбера')
-    if message.text[:10] == 'Напишите имя барбера' or message.text[:10] == 'Напишите имя барбера':
-        st = message.text.split (' ')
-        if 'txt' in st or 'тхт' in st:
-            tg_analytic.analysis (st, message.chat.id)
-            with open ('%s.txt' % message.chat.id, 'r', encoding='UTF-8') as file:
-                bot.send_document (message.chat.id, file)
-                tg_analytic.remove (message.chat.id)
-        else:
-            messages = tg_analytic.analysis (st, message.chat.id)
-            bot.send_message (message.chat.id, messages)
-
 bot.message_handler (commands=['list'])
 def list_command(message):
     bot.send_message(message.chat.id, 'Список администраторов')
@@ -83,10 +68,10 @@ def list_command(message):
 
 @bot.message_handler (commands=['admin'])
 def start_message(message):
-    bot.send_message(message.chat.id, 'Привет администратор', reply_markup=keyboard.admin)
+    bot.send_message(message.chat.id, 'Привет администратор')
 
 
-@bot.message_handler(commands=['start'])
+@bot.message_handler(commands=['start', 'help'])
 def start(message):
     bot.send_message(message.chat.id, 'Привет, я пока в тестовом режиме работаю. \nБудут проблемы нажми /help',
                       reply_markup=keyboard.keyboard1)
