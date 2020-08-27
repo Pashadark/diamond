@@ -8,8 +8,8 @@ keyboard1 = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_key
 keyboard1.row('✂Барбер')
 #Главное меню
 admin = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-admin.row('/time', '/static')
-admin.row('Админы', '❌Обратно')
+admin.row('Статистика', '/static')
+admin.row('Команды', '❌Обратно')
 #Барбер меню
 barber = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
 barber.row('Тигран')
@@ -31,10 +31,11 @@ service1.add(itembtn1, itembtn2, itembtn3, itembtn4, itembtn5, itembtn55, itembt
 service2 = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
 itembtn8 = types.KeyboardButton('Моделирование бороды')
 itembtn9 = types.KeyboardButton('Стрижка бороды и усов')
+itembtn100 = types.KeyboardButton('Королевское бритьё')
 itembtn10 = types.KeyboardButton('Камуфляж бороды')
 itembtn11 = types.KeyboardButton('Окантовка')
 itembtn12 = types.KeyboardButton('Ничего')
-service2.add(itembtn8, itembtn9, itembtn10, itembtn11, itembtn12)
+service2.add(itembtn8, itembtn9, itembtn10, itembtn11, itembtn12, itembtn100)
 # Сервис меню 3
 service3 = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
 itembtn13 = types.KeyboardButton('Черная маска')
@@ -46,9 +47,6 @@ itembtn18 = types.KeyboardButton('Патчи')
 itembtn19 = types.KeyboardButton('Удаление волос в носу')
 itembtn20 = types.KeyboardButton('Ничего')
 service3.add(itembtn13, itembtn14, itembtn15, itembtn16, itembtn17, itembtn18, itembtn19, itembtn20)
-
+# Меню помощи
 keyboardhelp = telebot.types.InlineKeyboardMarkup()
 keyboardhelp.add(telebot.types.InlineKeyboardButton('Написать разработчику', url='telegram.me/pashadark'))
-
-
-
